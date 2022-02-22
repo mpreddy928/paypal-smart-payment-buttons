@@ -57,6 +57,9 @@ export function buildOrderActions({ facilitatorAccessToken, intent, currency, me
         order = { ...order, intent: intent.toUpperCase() };
     
         order.purchase_units = order.purchase_units.map(unit => {
+            if (unit.description) {
+                unit.description = escape(unit.description);
+            }
             if (unit.amount.currency_code && unit.amount.currency_code !== currency) {
                 throw new Error(`Unexpected currency: ${ unit.amount.currency_code } passed to order.create. Please ensure you are passing /sdk/js?${ SDK_QUERY_KEYS.CURRENCY }=${ unit.amount.currency_code } in the paypal script tag.`);
             }
